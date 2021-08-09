@@ -17,21 +17,16 @@ const operations = {
 
 const priorities = {
     '+': 0,
-    '-': 0,
-    '*': 1,
-    '/': 1,
-    '(': -1,
-    ')': -1,
+    '-': 1,
+    '*': 2,
+    '/': 2
 };
 
 function expressionCalculator(expr) {
-    let tokens = expr.replace(/\s+/g, '').match(/(\d+)|[\)\(\+\-\*\/]?/g).filter(x => x != '');
+    let tokens = expr.replace(/\s+/g, '').replace(/\-\(/g, '-1*(').replace(/(\-\d+)/g, '+$1').match(/(\d+)|(\-\d+)|[\)\(\+\-\*\/]?/g).filter(x => x != '');
     let RPN = [], stack = [];
     tokens.forEach(token => {
         if (token == '(') {
-            // if (stack.length && stack[stack.length - 1] == "-") {
-            //     RPN.push(stack.pop());
-            // }
             stack.push(token);
         } else if (token == ')') {
             if (stack.length) {
@@ -47,8 +42,8 @@ function expressionCalculator(expr) {
         } else if (token in operations) {
             if (!stack.length) {
                 stack.push(token);
-            } else if (priorities[token] > priorities[stack[stack.length - 1]]) {
-
+            } else if (priorities[token] > priorities[stack[stack.length - 1]]
+                || stack[stack.length - 1] == "(") {
                 stack.push(token);
             } else {
                 RPN.push(stack.pop());

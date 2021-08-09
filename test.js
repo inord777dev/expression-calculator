@@ -3,8 +3,8 @@ const { expressionCalculator } = require('./src/index.js');
 
 describe("Easy", function() {
     it("Test simple addition", function() {
-        const expr = "20 - 57 * 12 - (  58 + 84 * 32 / 27  )";
-        const result = -821.5556;
+        const expr = "1-2*3-(4+5)";
+        const result = -14;
         expect(expressionCalculator(expr)).to.equal(result);
     });
 
